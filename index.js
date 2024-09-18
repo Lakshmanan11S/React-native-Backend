@@ -24,3 +24,9 @@ app.get('/',(req,res)=>{
 app.use('/api',allRoutes)
 
 app.listen(PORT,()=>{console.log("Server is running on:",PORT)})
+
+
+
+
+
+
