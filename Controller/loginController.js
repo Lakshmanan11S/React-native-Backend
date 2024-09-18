@@ -1,18 +1,29 @@
-const registerModel = require('../Model/registerModel');
-const bcrypt = require('bcrypt');
+const crypto  = require("crypto")
+const User = require("../Model/userModel")
+const JWT = require('jsonwebtoken')
+
+
+const generateSecretKey = () => {
+    const secretKey = crypto.randomBytes(32).toString("hex");
+  
+    return secretKey;
+  };
+  
+  const secretKey = generateSecretKey();
 
 exports.login = async(req,res)=>{
     try{
         const {email,password}=req.body
-        const registerEmail = await registerModel.findOne({email})
-        if(!registerEmail){
-            return res.status(404).json({message:"Email Not Found"})
+        const user = await User.findOne({email})
+        if(!user){
+            return res.status(401).json({message:"Invalid Email or Password"})
         }
-        const matchPassword = await bcrypt.compare(password,registerEmail.password)
-        if(!matchPassword){
-            return res.status(400).json({message:"Incorrect Password"})
+        if(user.password !==password){
+            return res.status(401).json({message:"Invalid Password"})
         }
-        res.status(200).json({message:"Login Successfully"})
+        const token = JWT.sign({userId:user._id},secretKey)
+
+        res.status(200).json({ token });
 
     }catch(error){
         res.status(500).json({message:"Internal Server Error"})
