@@ -62,7 +62,7 @@ const sendVerificationEmail=async(email,verificationToken)=>{
         from:process.env.EMAIL,
         to:email,
         subject:"Email Verification",
-        text:`Please click the following link to verify your email: http://localhost:5000/api/register/verify/${verificationToken} `,
+        text:`Please click the following link to verify your email: https://react-native-backend-1y0m.onrender.com/api/register/verify/${verificationToken} `,
     }
 
     try{
